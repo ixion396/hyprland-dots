@@ -1,0 +1,67 @@
+{
+    "layer": "top",
+    "position": "left",
+    "modules-left": ["custom/launcher"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": ["custom/mpris", "battery", "network", "clock"],
+    "hyprland/workspaces": {
+         "format": "",
+         "format-icons": {
+             "1": "",
+             "2": "",
+             "3": "",
+             "4": "",
+             "5": "",
+             "urgent": "",
+             "focused": "",
+             "default": ""
+         }
+     },
+        "tray": {
+        "spacing": 10
+    },
+    "custom/launcher": {
+	    "format": "󰣇",
+	    "on-click": "sh .config/rofi/launchers/type-3/launcher.sh",
+	    "tooltip": false
+    },
+    "custom/mpris": {
+      "format": "󰲸",
+      "on-click": "ags -t mpris-client"
+    },
+    "clock": {
+	      "interval": 60,
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+	      "format": "{:%H\n%M}",
+        "format-alt": "{:%Y-%m-%d}",
+        "on-click": "ags -t quick-settings"
+    },
+    "backlight": {
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "normal": 60,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "on-click": "ags -t quick-settings"
+    },
+    "network": {
+	      "format": "Loading",
+        "format-wifi": "{icon}",
+        "format-ethernet": "󰈁",
+        "format-disconnected": "󰤭",
+	      "format-icons": ["󰤟", "󰤢", "󰤥", "󰤨"],
+        "on-click": "ags -t quick-settings"
+    },
+    "pulseaudio": {
+        "format": "{icon}",
+	      "format-icons": ["", "󰖀", "󰕾"]
+    }
+}
+

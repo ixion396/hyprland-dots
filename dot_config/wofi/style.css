@@ -1,0 +1,45 @@
+#window {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+#inner-box {
+  margin: 10px;
+}
+
+#input {
+  background-color: rgba(120, 120, 120, 0.3);
+  border: none;
+  color: white;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-family: Inter SemiBold, sans-serif;
+}
+
+#input:selected {
+  outline: none;
+  border: none;
+}
+
+#img {
+  min-height: 16px;
+  min-width: 16px;
+  margin: 5px;
+  margin-right: 10px;
+}
+
+#entry {
+  font-family: Inter SemiBold, sans-serif;
+  border-radius: 5px;
+  min-width: 100px;
+  outline: none;
+}
+
+#entry:selected {
+  background-color: rgba(120, 120, 120, 0.3);
+}
+
+#unselected {
+  color: white;
+}

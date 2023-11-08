@@ -1,0 +1,10 @@
+export QT_QPA_PLATFORMTHEME="kvantum"
+export QT_PLATFORM_OVERRIDE="kvantum"
+
+alias vim=nvim
+alias nvide=neovide
+alias clock="tty-clock -s -c -C 4 -b"
+alias icat="kitten icat"
+alias "wofi"="wofi --show drun -W 335 -H 600 --allow-images -b -n -e -i -c ~/.config/wofi/config"
+
+eval "$(starship init zsh)"

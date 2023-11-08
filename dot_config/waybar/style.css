@@ -1,0 +1,161 @@
+@define-color bg-hover rgba(0, 0, 0, 0);
+@define-color bg rgba(25, 25, 25, 0);
+@define-color bg-solid rgba(55, 55, 55, 0.7);
+@define-color fg #ffffff;
+@define-color dark-fg #161320;
+@define-color accent #1e64d2;
+@define-color disabled rgb(65, 65, 65);
+@define-color border @fg;
+
+* {
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+/*  font-family: "Inter SemiBold", "Nerd Font Symbols"; */
+  font-family: "JetBrainsMono NF SemiBold"; 
+  font-size: 12pt;
+  padding-bottom: 0px;
+}
+
+tooltip {
+  background: @bg;
+  border-radius: 7px;
+  border: 0px solid @border;
+}
+
+window#waybar {
+  background-color: @bg;
+  color: @fg;
+}
+
+#window {
+	margin: 5px;
+	margin-left: -5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 7px;
+	background-color: @bg-solid;
+	color: @fg;
+}
+
+#workspaces {
+	margin: 5px;
+	padding: 3px;
+	padding-left: 0px;
+	padding-right: 1px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	border-radius: 25px;
+	background-color: @bg-solid;
+	color: @fg;
+}
+
+#workspaces button {
+	padding-right: 1px;
+	color: @disabled;
+}
+
+#workspaces button.active {
+	color: @accent;
+}
+
+#workspaces button:hover {
+	box-shadow: none;
+	text-shadow: none;
+	border: none;
+  outline: none;
+	background: none;
+	border-radius: 25px;
+}
+
+#mode {
+  margin: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 7px;
+  background-color: transparent;
+  color: @fg;
+}
+
+#tray {
+  margin: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: transparent;
+
+}
+
+#custom-launcher {
+	margin: 5px 5px 0px 5px;
+	padding-left: 6px;
+	padding-right: 10px;
+	padding-bottom: 7px;
+	padding-top: 7px;
+	border-radius: 25px 25px 25px 25px;
+	background-color: @bg-solid;
+  font-size: 20px;
+}
+
+#custom-mpris {
+	margin: 5px 5px 0px 5px;
+	padding-left: 6px;
+	padding-right: 10px;
+	padding-bottom: 7px;
+	padding-top: 7px;
+	border-radius: 25px 25px 25px 25px;
+	background-color: @bg-solid;
+  font-size: 20px;
+}
+
+#network {
+  margin: 0px 5px 0px 5px;
+  padding-left: 8px;
+  padding-right: 11px;
+  padding-bottom: 5px;
+  border-radius: 0px;
+  background-color: @bg-solid;
+  color: @fg;
+}
+
+#pulseaudio {
+	margin: 5px;
+	padding-left: 11px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	border-radius: 5px;
+	background-color: @bg-solid;
+}
+
+#memory,
+#temperature,
+
+#backlight {
+	margin: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: transparent;
+}
+
+#battery {
+	margin: 5px 5px 0px 5px;
+	padding-left: 11px;
+	padding-right: 10px;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	border-radius: 25px 25px 0px 0px;
+	background-color: @bg-solid;
+}
+
+#clock {
+  margin: 0px 5px 5px 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  border-radius: 0px 0px 25px 25px;
+  color: @fg;
+  background-color: @bg-solid;
+}
+
+/* bottom waybar */
