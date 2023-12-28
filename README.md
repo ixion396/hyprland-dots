@@ -18,8 +18,8 @@ chezmoi init --apply https://github.com/ixion396/hyprland-dots.git
 ```
 
 ### Keybinds
-`SUPER+d` = open wofi
-`SUPER+w` = open ags drawer
+`SUPER+d` = open wofi <br>
+`SUPER+w` = open ags drawer <br>
 Look at `~/.config/hypr/hyprland.conf` for more keybinds
 
 You should be all set! Give this repo a star if you like these dotfiles :)
