@@ -66,7 +66,8 @@ const trackLabel = () => Widget.Label ({
             self => {
                 let label = `${Mpris.players[0]?.trackTitle} by ${Mpris.players[0]?.trackArtists.join(", ")}`
 
-                if (label.length) label = label.slice(0, 30) + "..."
+                
+                if (label.length > 30) label = label.slice(0, 30) + "..."
 
                 self.label = label
             }

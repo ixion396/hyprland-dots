@@ -1,89 +1,80 @@
-.bar {
-/*    min-height: 1366px;*/
-    min-width: 24px;
-    background-color: rgba(25, 25, 25, 0.01);
+#top-bar {
+    background-color: rgba(255, 255, 255, 0);
 }
 
-.launcher {
-    margin: 5px;
-    border-radius: 25px;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    text-shadow: none;
-    background-image: none;
-    background-color: rgba(50, 50, 50, 0.7);
+.top-bar-content {
+    min-width: 1920px;
+    min-height: 30px;
+    background: none;
 }
-
-.launcher > label {
-    /* padding-top: 2px;
-    padding-bottom: 2px; */
-    padding-right: 4px;
-    font-size: 22px;
-    color: white;
-}
-
-/* .workspaces {
-    margin: 5px;
-    border-radius: 50px;
-    background-color: rgba(50, 50, 50, 0.7);
-}
-
-.workspaces > box {
-    padding-top: 10px;
-    padding-bottom: 10px;
-} */
 
 .workspace {
+    min-width: 16px;
+    min-height: 16px;
+
     margin: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+
     padding: 0px;
-    border: none;
-    outline: none;
+
+    border-radius: 25px;
+
+    background: none;
+    background-color: rgba(255, 255, 255, 0.15);
+
     box-shadow: none;
     text-shadow: none;
-    background-image: none;
-    color: rgb(65, 65, 65);
+    border: none;
+    outline: none;
+
+    transition-property: min-width;
+    transition-duration: 500ms;
 }
 
 .workspace:hover {
-    color: rgb(85, 85, 85)
-}
-
-.workspace > label {
-    /* margin-top: 2px;
-    margin-bottom: 2px;
-    padding-left: 13px;
-    padding-right: 7px; */
-    padding-right: 22px;
-    font-size: 25px;
+    min-width: 25px;
 }
 
 .selected-workspace {
-    color: #1e64d2;
+    min-width: 35px;
+
+    /* background-color: rgb(180, 180, 180); */
+    /* background-color: rgb(220, 220, 220); */
 }
 
 .selected-workspace:hover {
-    color: #5194ff;
+    min-width: 45px;
 }
 
-.quick-view {
-    margin: 5px;
-    border: none;
-    border-radius: 50px;
-    outline: none;
-    box-shadow: none;
-    text-shadow: none;
-    background-image: none;
-    background-color: rgba(50, 50, 50, 0.7);
+.workspace > label {
+    padding: 0px;
+    font-size: 0px;
+}
+
+.time {
+    font-family: 'JetBrainsMonoNL NF SemiBold', monospace;
     color: white;
-    font-size: 16px;
-    font-family: "Inter SemiBold", sans-serif;
 }
 
-.clock {
-    padding-bottom: 5px;
+.icon {
+    margin-right: 5px;
+
+    color: white;
+}
+
+.wifi {
+    margin-right: 18px;
+}
+
+.bluetooth {
+    margin-right: 13px;
 }
 
 .battery {
-    padding-bottom: 3px;
+    margin-right: 5px;
+
+    font-family: 'JetBrainsMonoNL NF SemiBold', monospace;
+
+    color: white;
 }

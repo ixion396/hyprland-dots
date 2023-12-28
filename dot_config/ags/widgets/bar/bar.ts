@@ -1,60 +1,33 @@
-import Widget, {Button} from 'resource:///com/github/Aylur/ags/widget.js';
-import hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
-import * as Utils from "resource:///com/github/Aylur/ags/utils.js"
-import battery from 'resource:///com/github/Aylur/ags/service/battery.js';
+import app from "resource:///com/github/Aylur/ags/app.js"
+import battery from "resource:///com/github/Aylur/ags/service/battery.js"
+import bluetooth from "resource:///com/github/Aylur/ags/service/bluetooth.js"
+import hyprland from "resource:///com/github/Aylur/ags/service/hyprland.js"
+import network from "resource:///com/github/Aylur/ags/service/network.js"
+import { execAsync } from "resource:///com/github/Aylur/ags/utils.js"
+import { Variable }  from "resource:///com/github/Aylur/ags/variable.js"
+import { Box, Button, CenterBox, EventBox, Icon, Label, Window } from "resource:///com/github/Aylur/ags/widget.js"
 
-const launcher = () => Widget.Button ({
-    className: "launcher",
-    valign: "end",
-    
-    onClicked: () => Utils.execAsync("wofi --show drun"),
+const workspaceDispatcher = ws => execAsync(`hyprctl dispatch workspace ${ws}`)
 
-    child: Widget.Label ("󰣇")
-})
-
-const workspaceDispatch = ws => Utils.execAsync(`hyprctl dispatch workspace ${ws}`)
-
-function getWorkspaceLabel(workspaceId) {
-    if (workspaceId === 1) return ""
-    if (workspaceId === 2) return "󰈹"
-    if (workspaceId === 3) return "󰈙"
-    if (workspaceId === 4) return "󰅨"
-    if (workspaceId === 5) return "󱎓"
-    if (workspaceId === 6) return "󰉼"
-    return ""
-}
-
-const workspaces = () => Widget.EventBox ({
+const workspaces = () => EventBox({
     className: "workspaces",
-    halign: "center",
+    vpack: "center",
 
-    onScrollUp: () => workspaceDispatch("+1"),
-    onScrollDown: () => workspaceDispatch("-1"),
+    onScrollUp: () => workspaceDispatcher("+1"),
+    onScrollDown: () => workspaceDispatcher("-1"),
 
-    child: Widget.Box ({
-        vertical: true,
-        // connections: [[hyprland, self => {
-        //     const buttonArray = Array.from({ length: 10 }, (_, i) => i + 1)
-        //     self.children = buttonArray.map(i => Widget.Button({
-        //         onClicked: () => Utils.execAsync(`hyprctl dispatch workspace ${i}`),
-        //         child: Widget.Label(`${i}`),
-        //         className: hyprland.active.workspace.id == i ? "focused" : "",
-        //         visible: hyprland.workspaces.values
-        //     }));
-        // }]],
+    child: Box({
+        vertical: false,
 
-        // children: Array.from({ length: 10 }, (_, i) => i + 1).map(i => Widget.EventBox ({
-        //     className: "workspace",
-        //     child: Widget.Label(" "),
-        //     setup: button => button.name = i.toString(),
-        //     onPrimaryClick: () => workspaceDispatch(i),
-        // })),
-
-        children: Array.from({ length: 10 }, (_, i) => i + 1).map(i => Widget.Button ({
+        children: Array.from({ length: 10 }, (_, i) => i + 1).map(i => Button({
+            setup: button => button.name = i.toString(), 
             className: "workspace",
-            child: Widget.Label(getWorkspaceLabel(i)),
-            setup: button => button.name = i.toString(),
-            onClicked: () => workspaceDispatch(i),
+           
+            tooltipText: `Workspace #${i.toString()}`,
+
+            onClicked: () => workspaceDispatcher(i),
+
+            child: Label("")
         })),
 
         connections: [[hyprland, self => self.children.forEach(button => {
@@ -64,76 +37,160 @@ const workspaces = () => Widget.EventBox ({
     })
 })
 
+const time = new Variable("0:0:0", {
+    poll: [100, "date +%H:%M:%S"]
+})
+
+const timeLabel = () => Label({
+    className: "time",
+
+    label: time.bind(),
+    
+    connections: [[100000, self => {
+        const weekdays = ["Sunday", "Monday", "Tuesday", " Wednesday", "Thursday", "Friday", "Saturday"]
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        const today = new Date()
+
+        self.tooltipText = `It is ${weekdays[today.getDay()]}, ${months[today.getMonth()]} ${today.getDate()}`
+    }]]
+})
+
+function getWifiLabel() {
+    if (network.primary === "wired") return "󰈁"
+    
+    if (network.primary === "wifi") {
+        if (network.wifi?.strength <= 10) return "󰤯"
+        if (network.wifi?.strength <= 25) return "󰤟"
+        if (network.wifi?.strength <= 50) return "󰤢"
+        if (network.wifi?.strength <= 75) return "󰤢"
+
+        return "󰤨"
+    }
+
+    return "󰤭"
+}
+
+const wifiLabel = () => Label({
+    classNames: ["icon", "wifi"],
+
+    connections: [[network, self => {
+        self.label = getWifiLabel()
+        self.tooltipText = `WiFi is at ${network.wifi?.strength}% strength`
+    }]]
+})
+
+function getBluetoothLabel() {
+    if (bluetooth.enabled) return "󰂯"
+    else return "󰂲"
+}
+
+const bluetoothIcon = () => Label({
+    classNames: ["icon", "bluetooth"],
+
+    connections: [[bluetooth, self => {
+        self.label = getBluetoothLabel()
+        self.tooltipText = `Connected to ${bluetooth.devices.length} device${bluetooth.devices.length === 1 ? "" : "s"}`
+    }]]
+})
+
 function getBatteryLabel() {
     if (battery.charging) {
-        if (battery.percent >= 10) return "󰢜"
-        if (battery.percent >= 20) return "󰂆"
-        if (battery.percent >= 30) return "󰂇"
-        if (battery.percent >= 40) return "󰂈"
-        if (battery.percent >= 50) return "󰢝"
-        if (battery.percent >= 60) return "󰂉"
-        if (battery.percent >= 70) return "󰢞"
-        if (battery.percent >= 80) return "󰂊"
-        if (battery.percent >= 90) return "󰂋"
         if (battery.percent === 100) return "󰂅"
+        if (battery.percent >= 90) return "󰂋"
+        if (battery.percent >= 80) return "󰂊"
+        if (battery.percent >= 70) return "󰢞"
+        if (battery.percent >= 60) return "󰂉"
+        if (battery.percent >= 50) return "󰢝"
+        if (battery.percent >= 40) return "󰂈"
+        if (battery.percent >= 30) return "󰂇"
+        if (battery.percent >= 20) return "󰂆"
+        if (battery.percent >= 10) return "󰢜"
 
         return "󰢟"
     }
 
-    if (battery.percent >= 10) return "󰁺"
-    if (battery.percent >= 20) return "󰁻"
-    if (battery.percent >= 30) return "󰁼"
-    if (battery.percent >= 40) return "󰁽"
-    if (battery.percent >= 50) return "󰁿"
-    if (battery.percent >= 60) return "󰁿"
-    if (battery.percent >= 70) return "󰂀"
-    if (battery.percent >= 80) return "󰂁"
-    if (battery.percent >= 90) return "󰂂"
     if (battery.percent === 100) return "󰁹"
+    if (battery.percent >= 90) return "󰂂"
+    if (battery.percent >= 80) return "󰂁"
+    if (battery.percent >= 70) return "󰂀"
+    if (battery.percent >= 60) return "󰁿"
+    if (battery.percent >= 50) return "󰁿"
+    if (battery.percent >= 40) return "󰁽"
+    if (battery.percent >= 30) return "󰁼"
+    if (battery.percent >= 20) return "󰁻"
+    if (battery.percent >= 10) return "󰁺"
 
     return "󰂎"
 }
 
-const quickView = () => Widget.Button ({
-    className: "quick-view",
-    valign: "start",
-    child: Widget.Box ({
-        vertical: true,
-        children: [
-            Widget.Label ({
-                className: "battery",
-                halign: "center",
-                connections: [[battery, self => self.label = getBatteryLabel()]]
-            }),
+function secondsToHms(durationSeconds: number) {
+    var hours = Math.floor(durationSeconds / 3600);
+    var minutes = Math.floor(durationSeconds % 3600 / 60);
+    var seconds = Math.floor(durationSeconds % 3600 % 60);
 
-            Widget.Label ({
+    var hDisplay = hours > 0 ? hours + (hours == 1 ? " hour and " : " hours and ") : "";
+    var mDisplay = minutes > 0 ? minutes + (minutes == 1 ? " minute " : " minutes ") : "";
+    var sDisplay = seconds > 0 ? seconds + (seconds == 1 ? " second" : " seconds") : "";
+    return hDisplay + mDisplay; 
+}
 
-            }),
+const batteryIcon = () => Label({
+    className: "icon",
 
-            Widget.Label ({
-                className: "clock",
-                halign: "center",
-                connections: [[1000, self => self.label = Utils.exec("date +%H%M").slice(0, 2) + "\n" + 
-                    Utils.exec("date +%H%M").slice(2, 4)]]
-            })
-        ]
-    })
+    connections: [[battery, self => {
+        self.label = getBatteryLabel()
+        self.tooltipText = battery.charging ? `${battery.timeRemaining} until charged` : `${secondsToHms(battery.timeRemaining)}until empty`
+    }]],
 })
 
-const bar = () => Widget.Window ({
-    name: "ags-bar",
-    className: "bar",
-    anchor: ["left"],
-    exclusive: true,
+const batteryLabel = () => Label({
+    className: "battery",
+    hpack: "end",
 
-    child: Widget.CenterBox ({
-        className: "bar-content",
-        vertical: true,
-        spacing: 100,
+    connections: [[battery, self => {
+        self.label = battery.percent + "%"
+        self.tooltipText = battery.charging ? `${battery.timeRemaining} until charged` : `${secondsToHms(battery.timeRemaining)}until empty`
+    }]]
+})
 
-        startWidget: launcher(),
-        centerWidget: workspaces(),
-        endWidget: quickView(),
+const batteryContainer = () => Box({
+    vertical: false,
+    hpack: "end",
+
+    children: [
+        batteryIcon(),
+        batteryLabel()
+    ]
+})
+
+const end = () => Box({
+    vertical: false,
+    hpack: "end",
+
+    children: [
+        // Button({
+        //     onClicked:() => app.toggleWindow("ags-drawer"),
+        //     child: Label("JDSADSAIDISAJDOIJSAd")
+        // }),
+        wifiLabel(),
+        bluetoothIcon(),
+        batteryContainer()
+    ]
+})
+
+const bar = () => Window({
+    name: "top-bar",
+
+    anchor: ["top"],
+    exclusivity: "exclusive",
+
+    child: CenterBox ({
+        className: "top-bar-content",
+        vertical: false,
+
+        startWidget: workspaces(),
+        centerWidget: timeLabel(),
+        endWidget: end()
     })
 })
 

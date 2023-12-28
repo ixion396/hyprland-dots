@@ -1,92 +1,9 @@
-@import url("widgets/quick-settings/style.css");
+/* @import url("widgets/quick-settings/style.css"); */
+/* @import url("widgets/bar/style.css"); */
+
+/* @import url("widgets/popup/style.css"); */
 @import url("widgets/bar/style.css");
-@import url("widgets/mpris/style.css");
+@import url("widgets/newdrawer/style.css");
 
-#control-center-content {
-    /* background-color: rgba(40, 40, 40, 0.7); */
-    margin: 15px;
-    border-radius: 10px ;
-    /* min-width: 250px;
-    min-height: 50px; */
-}
-
-.control-button-top {
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    font-size: 30px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: none;
-    background-image: none;
-    background-color: rgb(65, 65, 65);
-    text-shadow: none;
-    color: white;
-}
-
-.control-button-top > label {
-    padding-right: 6px;
-}
-
-.control-button {
-    margin-left: 10px;
-    margin-bottom: 10px;
-    font-size: 30px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: none;
-    background-image: none;
-    background-color: rgb(65, 65, 65);
-    text-shadow: none;
-    color: white;
-}
-
-.control-button > label {
-    padding-right: 6px;
-}
-
-.battery {
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    min-height: 50px;
-}
-
-.battery > trough {
-    min-height: 50px;
-    min-width: 200px;
-    border: none;
-    border-radius: 5px;
-    background-color: rgb(65, 65, 65);
-}
-
-.battery > trough > progress {
-    min-height: 50px;
-    min-width: 200px;
-    border: none;
-    border-radius: 5px;
-    background-image: linear-gradient(90deg, rgb(0, 100, 255), rgb(150, 150, 255));
-}
-
-.battery-charging {
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    min-height: 50px;
-}
-
-.battery-charging > trough {
-    min-height: 50px;
-    min-width: 200px;
-    border: none;
-    border-radius: 5px;
-    background-color: rgb(65, 65, 65);
-}
-
-.battery-charging > trough > progress {
-    min-height: 50px;
-    min-width: 200px;
-    border: none;
-    border-radius: 5px;
-    background-image: linear-gradient(90deg, rgb(0, 255, 70), rgb(150, 255, 150));
-}
+/* TODO remove*/
+/* @import url("widgets/wallpaper/style.css"); */

@@ -1,14 +1,16 @@
 //#region Services
 
-interface Service { }
+interface Service {
+  bind: (property: string) => any
+}
 
-// declare module "resource:///com/github/Aylur/ags/service.js" {
-//   export class Service {
-      
-//   }
+declare module "resource:///com/github/Aylur/ags/service.js" {
+  export class Service {
 
-//   export function register(service: Service, signals, props): void;
-// }
+  }
+
+  export function register(service: Service, signals, props): void;
+}
 
 declare module 'resource:///com/github/Aylur/ags/service/applications.js' {
   export interface App {
@@ -24,6 +26,7 @@ declare module 'resource:///com/github/Aylur/ags/service/applications.js' {
 
   interface Applications extends Service {
     query(term: string): App[];
+    list: App[];
   }
 
   const applications: Applications;
@@ -58,6 +61,7 @@ declare module 'resource:///com/github/Aylur/ags/service/battery.js' {
     percent: number;
     charging: boolean;
     charged: boolean;
+    timeRemaining: number;
   }
 
   const battery: Battery;
@@ -435,10 +439,10 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
   interface WindowArgs extends CommonArgs<WindowType> {
     child: Widget;
     anchor: Anchor | Anchor[];
-    exclusive: boolean;
+    exclusivity: 'exclusive' | 'normal' | 'ignore'
     focusable: boolean;
     layer: 'overlay' | 'top' | 'bottom' | 'background';
-    margin:
+    margins:
     | number
     | [number]
     | [number, number]
@@ -450,7 +454,7 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
   type WindowType = WindowArgs;
   export function Window(args: Partial<WindowArgs>): WindowArgs;
 
-  type Connection<W extends Widget> = [Service, Command<W>, string] | [Service, Command<W>]; // TODO
+  type Connection<W extends Widget> = [Service, Command<W>, string] | [Service, Command<W>] | [number, Command<W>]; // TODO
 
   interface CommonArgs<W extends Widget> {
     setup: (self) => void;
@@ -458,11 +462,11 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
     classNames: string[];
     name: string;
     label: string;
+    properties: any[];
     connections: (Connection<W> | number)[];
     css: string;
-    style: string;
-    halign: Align;
-    valign: Align;
+    hpack: Align;
+    vpack: Align;
     hexpand: boolean;
     vexpand: boolean;
     sensitive: boolean;
@@ -509,6 +513,7 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
   interface EntryArgs extends CommonArgs<EntryType> {
     onChange: Command<EntryType>;
     onAccept: Command<EntryType>;
+    text: string;
   }
   type EntryType = Widget & EntryArgs;
   export function Entry(args: Partial<EntryArgs>): EntryType;
@@ -521,7 +526,7 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
     onPrimaryClickRelease: Command<EventBoxType>;
     onSecondaryClickRelease: Command<EventBoxType>;
     onMiddleClickRelease: Command<EventBoxType>;
-    onHoverRelease: Command<EventBoxType>;
+    onHover: Command<EventBoxType>;
     onHoverLost: Command<EventBoxType>;
     onScrollUp: Command<EventBoxType>;
     onScrollDown: Command<EventBoxType>;
@@ -561,7 +566,9 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
 
   interface RevealerArgs extends CommonArgs<RevealerType> {
     child: Widget;
+    transitionDuration: number;
     transition: 'none' | 'crossfade' | 'slide_left' | 'slide_right' | 'slide_down' | 'slide_up';
+    revealChild: boolean;
   }
   type RevealerType = Widget & RevealerArgs;
   export function Revealer(args: Partial<RevealerArgs>): RevealerType;
@@ -576,11 +583,11 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
 
   interface SliderArgs extends CommonArgs<SliderType> {
     vertical: boolean;
-    draw_value: boolean;
+    drawValue: boolean;
     value: number;
     min: number;
     max: number;
-    onChange: Command<SliderType>;
+    onChange: (event: any) => void;
   }
   type SliderType = Widget & SliderArgs;
   export function Slider(args: Partial<SliderArgs>): SliderArgs;
@@ -629,6 +636,23 @@ declare module 'resource:///com/github/Aylur/ags/widget.js' {
   }
   type MenuItemType = Widget & MenuItemArgs;
   export function MenuItem(args: Partial<MenuItemArgs>): Widget;
+}
+
+//#endregion
+
+//#region Variables
+
+declare module 'resource:///com/github/Aylur/ags/variable.js' {
+  interface Variable {
+    listen: string | string[] | [string[], () => any];
+    poll: [number, string] | [number, string[]] | [number, string, () => void] | [number, string[], () => any] | [number, string, (any) => any]
+    bind: () => any
+  }
+  // export function Variable(defaultValue: string, args: Partial<Variable>): Variable;
+
+  class Variable {
+    public constructor(initialValue: any, args: Partial<Variable>)
+  }
 }
 
 //#endregion

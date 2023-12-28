@@ -2,34 +2,35 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Brightness from '../../services/brightness.js';
+import mprisClient from './mpris/mpris.js';
 
-const profilePicture = () => Widget.Box ({
+const profilePicture = () => Widget.Box({
     className: "profile-picture"
 })
 
-const powerButtons = () => Widget.Box ({
+const powerButtons = () => Widget.Box({
     vertical: false,
 
     children: [
-        Widget.Button ({
+        Widget.Button({
             className: "power-button",
-            onPrimaryClick: "shutdown now",
+            onPrimaryClick: () => "shutdown now",
 
-            child: Widget.Label ("󰐥")
+            child: Widget.Label("󰐥")
         }),
 
-        Widget.Button ({
+        Widget.Button({
             className: "power-button",
-            onPrimaryClick: "reboot now",
+            onPrimaryClick: () => "reboot now",
 
-            child: Widget.Label ("󰑓")
+            child: Widget.Label("󰑓")
         }),
 
-        Widget.Button ({
+        Widget.Button({
             className: "power-button",
-            onPrimaryClick: "hyprctl dispatch exit",
+            onPrimaryClick: () => "hyprctl dispatch exit",
 
-            child: Widget.Label ("󱅞")
+            child: Widget.Label("󱅞")
         })
     ]
 })
@@ -47,13 +48,13 @@ function findVolumeRange(volume) {
     }
 }
 
-const muteButton = (type = "speaker") => Widget.Button ({
+const muteButton = (type = "speaker") => Widget.Button({
     className: "volume-button",
     // @ts-ignore
-    child: Widget.Label (findVolumeRange(volumeSlider.value))
+    child: Widget.Label(findVolumeRange(volumeSlider.value))
 })
 
-const volumeSlider = (type = "speaker") => Widget.Slider ({
+const volumeSlider = (type = "speaker") => Widget.Slider({
     className: "volume-slider",
     hexpand: true,
     draw_value: false,
@@ -63,73 +64,93 @@ const volumeSlider = (type = "speaker") => Widget.Slider ({
     }, `${type}-changed`]],
 });
 
-const brightnessLabel = () => Widget.Button ({
+const brightnessLabel = () => Widget.Button({
     className: "volume-button",
-    child: Widget.Label ("󰖨")
+    child: Widget.Label("󰖨")
 })
 
-const brightnessSlider = () => Widget.Slider ({
+const brightnessSlider = () => Widget.Slider({
     className: "volume-slider",
     hexpand: true,
     draw_value: false,
     // @ts-ignore
     binds: [["value", Brightness, "screen"]],
-    onChange: ({value}) => Brightness.screen = value
+    onChange: ({ value }) => Brightness.screen = value
 })
 
-const batteryLabel = () => Widget.Label ({
+const batteryLabel = () => Widget.Label({
     className: "battery-label",
-    halign: "start",
+    hpack: "start",
     connections: [[Battery, self => {
-        const weekdays = ["Sunday", "Monday", "Tuesday"," Wednesday", "Thursday", "Friday", "Saturday"]
+        const weekdays = ["Sunday", "Monday", "Tuesday", " Wednesday", "Thursday", "Friday", "Saturday"]
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         const today = new Date()
 
-        // ${new Date(Battery.timeRemaining * 1000).toISOString().slice(12, 16)} ${Battery.charging ? "until full" : "left"}
         self.label = `${weekdays[today.getDay()]}, ${months[today.getMonth()]} ${today.getDate()}  |  ${Battery.percent}%`
     }]]
 })
 
-const quickSettings = () => Widget.Window ({
+const quickSettings = () => Widget.Window({
     name: "quick-settings",
     className: "quick-settings",
     anchor: ["bottom", "left"],
-    margin: [10, 10, 10, 10],
+    margins: [32, 32, 32, 32],
 
-    focusable: true,
-    popup: true,
+    // focusable: true,
+    // popup: true,
 
-    child: Widget.Box ({
-        name: "control-center-content",
+    child: Widget.Box({
         vertical: true,
         children: [
-            Widget.Box ({
-                vertical: false,
-                spacing: 60,
+            Widget.Box({
+                name: "control-center-content",
+                vertical: true,
                 children: [
-                    profilePicture(),
-                    powerButtons()
+                    Widget.Box({
+                        vertical: false,
+                        spacing: 60,
+                        children: [
+                            profilePicture(),
+                            powerButtons()
+                        ]
+                    }),
+
+                    Widget.Box({
+                        vertical: false,
+                        children: [
+                            muteButton(),
+                            volumeSlider()
+                        ]
+                    }),
+
+                    Widget.Box({
+                        vertical: false,
+                        children: [
+                            brightnessLabel(),
+                            brightnessSlider()
+                        ]
+                    }),
+
+                    batteryLabel()
                 ]
             }),
 
-            Widget.Box ({
-                vertical: false,
-                children: [
-                    muteButton(),
-                    volumeSlider() 
-                ]
-            }),
+            // mprisClient()
 
-            Widget.Box ({
-                vertical: false,
-                children: [
-                    brightnessLabel(),
-                    brightnessSlider()
-                ]
-            }),
-
-            batteryLabel()
-        ] 
+            // Widget.Box({
+            //     name: "notification-center-content",
+            //     vertical: true,
+            //     children: [
+            //         // Widget.Box ({
+            //         // className: "notifications",
+            //         // style: "min-width: 1px;",
+            //         // vertical: true,
+            //         // binds: [["children", notifications, "popups",
+            //         // popups => popups.map(notification)]]
+            //         // })
+            //     ]
+            // })
+        ]
     })
 })
 

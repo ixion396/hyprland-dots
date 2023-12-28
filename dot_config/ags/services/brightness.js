@@ -1,59 +1,54 @@
-import Service from "resource:///com/github/Aylur/ags/service.js"
-import * as Utils from "resource:///com/github/Aylur/ags/utils.js"
-
-const KBD = "intel_backlight"
-
+import Service from "resource:///com/github/Aylur/ags/service.js";
+import * as Utils from "resource:///com/github/Aylur/ags/utils.js";
+const KBD = "intel_backlight";
 class Brightness extends Service {
     static {
-        Service.register(this, {}, {
-            'screen': ['float', 'rw'],
-            'kbd': ['int', 'rw'],
+        Service.register(this, {
+            'screen-changed': ['float'],
+        }, {
+            'screen-value': ['float', 'rw'],
         });
     }
-
-    _kbd = 0;
-    _screen = 0;
-
-    get kbd() { return this._kbd; }
-    get screen() { return this._screen; }
-
-    set kbd(value) {
-        if (value < 0 || value > this._kbdMax)
-            return;
-
-        Utils.execAsync(`brightnessctl -d ${KBD} s ${value} -q`)
-            .then(() => {
-                this._kbd = value;
-                this.changed('kbd');
-            })
-            .catch(console.error);
+    // this Service assumes only one device with backlight
+    #interface = Utils.exec("sh -c 'ls -w1 /sys/class/backlight | head -1'");
+    // # prefix means private in JS
+    #screenValue = 0;
+    #max = Number(Utils.exec('brightnessctl max'));
+    // the getter has to be in snake_case
+    get screen_value() {
+        return this.#screenValue;
     }
-
-    set screen(percent) {
+    // the setter has to be in snake_case too
+    set screen_value(percent) {
         if (percent < 0)
             percent = 0;
-
         if (percent > 1)
             percent = 1;
-
-        Utils.execAsync(`brightnessctl s ${percent * 100}% -q`)
-            .then(() => {
-                this._screen = percent;
-                this.changed('screen');
-            })
-            .catch(console.error);
+        Utils.execAsync(`brightnessctl set ${percent * 100}% -q`);
+        // the file monitor will handle the rest
     }
-
     constructor() {
         super();
-        try {
-            this._kbd = Number(Utils.exec(`brightnessctl -d ${KBD} g`));
-            this._kbdMax = Number(Utils.exec(`brightnessctl -d ${KBD} m`));
-            this._screen = Number(Utils.exec('brightnessctl g')) / Number(Utils.exec('brightnessctl m'));
-        } catch (error) {
-            console.error('missing dependancy: brightnessctl');
-        }
+        // setup monitor
+        const brightness = `/sys/class/backlight/${this.#interface}/brightness`;
+        Utils.monitorFile(brightness, () => this.#onChange());
+        // initialize
+        this.#onChange();
+    }
+    #onChange() {
+        this.#screenValue = Number(Utils.exec('brightnessctl get')) / this.#max;
+        // signals have to be explicity emitted
+        this.emit('changed'); // emits "changed"
+        this.notify('screen-value'); // emits "notify::screen-value"
+        // or use Service.changed(propName: string) which does the above two
+        // this.changed('screen-value');
+        // emit screen-changed with the percent as a parameter
+        this.emit('screen-changed', this.#screenValue);
+    }
+    // overwriting the connect method, let's you
+    // change the default event that widgets connect to
+    connect(event = 'screen-changed', callback) {
+        return super.connect(event, callback);
     }
 }
-
 export default new Brightness();

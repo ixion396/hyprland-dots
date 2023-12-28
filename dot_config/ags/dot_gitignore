@@ -1,0 +1,9 @@
+# node stuff
+package-lock.json
+node_modules/*
+
+# all compiled js files
+widgets/*.js
+
+# type declarations
+ags.js

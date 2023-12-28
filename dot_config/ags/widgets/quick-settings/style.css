@@ -1,28 +1,38 @@
-.quick-settings {
+@import url("./mpris/style.css");
+
+@keyframes open {
+    0% {
+        margin-left: 400px;
+    }
+    100% {
+        margin-left: 0px;
+    }
+}
+
+#control-center-content {
+    /* margin-bottom: 15px; */
+    padding: 15px;
     background-color: rgba(60, 60, 60, 0.01);
     border-radius: 10px;
-    min-height: 400px;
-    min-width: 300px;
 }
 
 .profile-picture {
     margin: 10px;
-    background-image: url("../../../../Pictures/astronaut-on-horse.png");
+    margin-right: 80px;
+    background-image: url("../../../../.face.icon");
     background-size: cover;
-    min-height: 40px;
-    min-width: 40px;
+    min-height: 50px;
+    min-width: 50px;
     border-radius: 40px;
 }
 
 .power-button {
-    background-color: rgba(40, 40, 40, 0.7);
+    background-color: rgba(50, 50, 50, 0.7);
     background-image: none;
     border: none;
     text-shadow: none;
     margin: 10px;
-    /* min-height: 40px;
-    min-width: 40px; */
-    font-size: 20px;
+    font-size: 25px;
     border-radius: 40px;
     box-shadow: none;
 }
@@ -30,17 +40,17 @@
 .power-button > label {
     color: white;
     border-radius: 40px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 9px;
+    padding-right: 9px;
 }
 
 .volume-button {
-    background-color: rgba(40, 40, 40, 0.7);
+    background-color: rgba(50, 50, 50, 0.7);
     background-image: none;
     border: none;
     text-shadow: none;
     margin: 10px;
-    font-size: 20px;
+    font-size: 25px;
     border-radius: 40px;
     box-shadow: none;
 }
@@ -48,52 +58,38 @@
 .volume-button > label {
     color: white;
     border-radius: 40px;
-    padding-right: 5px
-}
-
-.volume-slider {
-    min-height: 8px;
-    border-radius: 10px;
-    border: none;
-}
-
-.volume-slider > contents {
-    min-height: 8px;
-    border-radius: 10px;
-    border: none
+    padding-left: 2px;
+    padding-right: 7px
 }
 
 .volume-slider > contents > trough {
-    min-height: 8px;
-    border-radius: 10px;
-    background-color: rgba(40, 40, 40, 0.7);
-    border-color: rgba(40, 40, 40, 0.7);
+    min-height: 2px;
+    background-color: rgba(50, 50, 50, 0.7);
+    border-color: rgba(50, 50, 50, 0.7);
 }
 
 .volume-slider > contents > trough > highlight {
     background-color: #1e64d2;
-    min-height: 8px;
-    border-radius: 10px;
+    border-radius: 0px;
     border: none;
 }
 
 .volume-slider > contents > trough > slider {
-    min-height: 8px;
-    background: none;
+    min-width: 35px;
+    background-image: none;
+    background-color: #5194ff;
     border-radius: 25px;
     border: none;
+    outline: none;
     box-shadow: none;
     text-shadow: none;
-    /* background-color: white;
-    background-image: none; */
 }
 
 .battery-label {
     font-family: "Inter SemiBold", sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 12px;
-    /* padding-right: 120px; */
+    padding-bottom: 15px;
+    padding-left: 15px;
     color: white;
 }
