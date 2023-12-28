@@ -3,7 +3,7 @@ require("config.lazy")
 
 -- neovide settings
 if vim.g.neovide then
-	vim.o.guifont = "JetBrainsMono NF SemiBold:h9"
+	vim.o.guifont = "JetBrainsMono NF SemiBold:h11"
 
 	vim.g.neovide_transparency = 0
 	vim.g.neovide_background_color = "#191919"
